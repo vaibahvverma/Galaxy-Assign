@@ -1,0 +1,74 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+model Workflow {
+  id        String   @id @default(cuid())
+  userId    String   // Clerk user ID
+  name      String   @default("Untitled Workflow")
+  nodes     Json     @default("[]")
+  edges     Json     @default("[]")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  runs WorkflowRun[]
+
+  @@index([userId])
+}
+
+model WorkflowRun {
+  id         String   @id @default(cuid())
+  workflowId String
+  userId     String
+  scope      RunScope
+  status     RunStatus
+  startedAt  DateTime @default(now())
+  finishedAt DateTime?
+  durationMs Int?
+
+  workflow Workflow  @relation(fields: [workflowId], references: [id], onDelete: Cascade)
+  nodeRuns NodeRun[]
+
+  @@index([userId])
+  @@index([workflowId])
+}
+
+model NodeRun {
+  id         String    @id @default(cuid())
+  runId      String
+  nodeId     String
+  nodeType   String
+  status     RunStatus
+  inputData  Json?
+  outputData Json?
+  error      String?
+  startedAt  DateTime  @default(now())
+  durationMs Int?
+
+  run WorkflowRun @relation(fields: [runId], references: [id], onDelete: Cascade)
+
+  @@index([runId])
+}
+
+enum RunScope {
+  FULL
+  PARTIAL
+  SINGLE
+}
+
+enum RunStatus {
+  PENDING
+  RUNNING
+  SUCCESS
+  FAILED
+  PARTIAL
+}
