@@ -163,16 +163,8 @@ const useWorkflowStore = create<WorkflowState>((set, get) => ({
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           workflowId: wfId,
-          // Strip base64 data URLs from nodes — only keep real /uploads/ URLs and text
-          nodes: nodes.map(n => ({
-            ...n,
-            data: {
-              ...n.data,
-              // Replace base64 with null (execute route won't need it — it uses Gemini inline data from the URL)
-              imageUrl: (typeof n.data?.imageUrl === 'string' && n.data.imageUrl.startsWith('data:')) ? null : n.data?.imageUrl,
-              videoUrl: (typeof n.data?.videoUrl === 'string' && n.data.videoUrl.startsWith('data:')) ? null : n.data?.videoUrl,
-            }
-          })),
+          // Pass nodes with full image data so Gemini can process images inline
+          nodes,
           edges,
           scope,
           selectedNodeIds,

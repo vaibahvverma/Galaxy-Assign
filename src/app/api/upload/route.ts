@@ -1,15 +1,7 @@
-import { auth } from "@clerk/nextjs/server";
 import { NextRequest } from "next/server";
-import { writeFile } from "fs/promises";
-import { join } from "path";
-import { randomUUID } from "crypto";
 
-// POST /api/upload — saves file to public/uploads/, returns a real /uploads/filename URL
+// POST /api/upload — converts file to base64 data URL, works on Vercel (no disk write needed)
 export async function POST(req: NextRequest) {
-  // const { userId } = await auth();
-  // if (!userId) return Response.json({ error: "Unauthorized" }, { status: 401 });
-  const userId = "test_user";
-
   try {
     const formData = await req.formData();
     const file = formData.get("file") as File | null;
@@ -18,21 +10,19 @@ export async function POST(req: NextRequest) {
       return Response.json({ error: "No file provided" }, { status: 400 });
     }
 
-    // Create unique filename
-    const ext = file.name.split(".").pop() || "bin";
-    const fileName = `${randomUUID()}.${ext}`;
-    const uploadDir = join(process.cwd(), "public", "uploads");
-    const filePath = join(uploadDir, fileName);
+    // Max 20MB to stay within Vercel request limits
+    if (file.size > 20 * 1024 * 1024) {
+      return Response.json({ error: "File too large (max 20MB)" }, { status: 413 });
+    }
 
-    // Write file to disk
+    // Convert to base64 data URL — works everywhere, no disk needed
     const buffer = Buffer.from(await file.arrayBuffer());
-    await writeFile(filePath, buffer);
-
-    // Return a simple URL (no base64, keeps payload tiny)
-    const url = `/uploads/${fileName}`;
+    const base64 = buffer.toString("base64");
+    const mimeType = file.type || "application/octet-stream";
+    const dataUrl = `data:${mimeType};base64,${base64}`;
 
     return Response.json({
-      url,
+      url: dataUrl,
       fileName: file.name,
       size: file.size,
     });
@@ -41,3 +31,4 @@ export async function POST(req: NextRequest) {
     return Response.json({ error: err.message }, { status: 500 });
   }
 }
+
