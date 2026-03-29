@@ -96,7 +96,7 @@ function WorkflowCanvasInner() {
           zoomable
         />
         <Controls 
-          className="!bg-card !border !border-border !fill-foreground [&>button]:!border-b-border [&>button]:hover:!bg-accent" 
+          className="!bg-zinc-900 !border !border-zinc-800 [&>button]:!bg-zinc-900 [&>button]:!text-zinc-300 [&>button]:!border-b-zinc-800 [&>button]:!fill-zinc-300 hover:[&>button]:!bg-zinc-800 hover:[&>button]:!text-white hover:[&>button]:!fill-white" 
         />
       </ReactFlow>
     </div>
