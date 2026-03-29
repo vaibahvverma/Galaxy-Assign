@@ -5,31 +5,31 @@ export const initialNodes: Node[] = [
   {
     id: "upload-image-1",
     type: "imageUpload",
-    position: { x: 100, y: 100 },
+    position: { x: 80, y: 200 },
     data: { label: "Upload Product Photo" }
   },
   {
     id: "crop-1",
     type: "cropImage",
-    position: { x: 450, y: 100 },
+    position: { x: 480, y: 200 },
     data: { label: "Crop Image" }
   },
   {
     id: "text-system",
     type: "text",
-    position: { x: 450, y: -80 },
+    position: { x: 480, y: -160 },
     data: { text: "You are a professional marketing copywriter. Generate a compelling one-paragraph product description." }
   },
   {
     id: "text-user",
     type: "text",
-    position: { x: 450, y: 350 },
+    position: { x: 480, y: 480 },
     data: { text: "Product: Wireless Bluetooth Headphones. Features: Noise cancellation, 30-hour battery, foldable design." }
   },
   {
     id: "llm-1",
     type: "llm",
-    position: { x: 800, y: 100 },
+    position: { x: 900, y: 200 },
     data: { model: "gemini-1.5-pro", label: "Generate Description" }
   },
 
@@ -37,13 +37,13 @@ export const initialNodes: Node[] = [
   {
     id: "upload-video-1",
     type: "videoUpload",
-    position: { x: 100, y: 600 },
+    position: { x: 80, y: 780 },
     data: { label: "Upload Video Demo" }
   },
   {
     id: "extract-frame-1",
     type: "extractFrame",
-    position: { x: 450, y: 600 },
+    position: { x: 480, y: 780 },
     data: { timestamp: "50%", label: "Extract Mid Frame" }
   },
 
@@ -51,13 +51,13 @@ export const initialNodes: Node[] = [
   {
     id: "text-summary-system",
     type: "text",
-    position: { x: 800, y: 600 },
+    position: { x: 900, y: 680 },
     data: { text: "You are a social media manager. Create a tweet-length marketing post based on the product image and video frame." }
   },
   {
     id: "llm-2-convergence",
     type: "llm",
-    position: { x: 1200, y: 300 },
+    position: { x: 1340, y: 430 },
     data: { model: "gemini-1.5-pro", label: "Final Marketing Summary" }
   }
 ];

@@ -1,18 +1,23 @@
 import { Handle, Position } from '@xyflow/react';
 import { Type } from 'lucide-react';
 import BaseNode from './BaseNode';
-import { useState } from 'react';
+import { useState, useRef, useCallback } from 'react';
 import useWorkflowStore from '@/store/useWorkflowStore';
 
 export default function TextNode({ id, data, isConnectable }: any) {
   const [text, setText] = useState(data.text || '');
   const updateNodeData = useWorkflowStore((s) => s.updateNodeData);
+  const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+  const handleChange = useCallback((e: React.ChangeEvent<HTMLTextAreaElement>) => {
     const val = e.target.value;
     setText(val);
-    updateNodeData(id, { text: val });
-  };
+    // Debounce store update — only sync 300ms after user stops typing
+    if (debounceRef.current) clearTimeout(debounceRef.current);
+    debounceRef.current = setTimeout(() => {
+      updateNodeData(id, { text: val });
+    }, 300);
+  }, [id, updateNodeData]);
 
   return (
     <BaseNode id={id} title="Text" icon={<Type size={16} className="text-blue-400" />} isRunning={data?.isRunning}>
