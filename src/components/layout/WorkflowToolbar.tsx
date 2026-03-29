@@ -86,7 +86,7 @@ export default function WorkflowToolbar() {
 
       {/* UserButton */}
       <div className="absolute top-4 right-4 z-20 pointer-events-auto">
-        <UserButton />
+        {/* <UserButton /> */}
       </div>
     </>
   );

@@ -13,12 +13,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <ClerkProvider publishableKey={process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY!}>
-      <html lang="en" className="dark" suppressHydrationWarning>
-        <body className="antialiased flex flex-col h-screen w-screen overflow-hidden bg-background text-foreground">
-          {children}
-        </body>
-      </html>
-    </ClerkProvider>
+    <html lang="en" className="dark" suppressHydrationWarning>
+      <body className="antialiased flex flex-col h-screen w-screen overflow-hidden bg-background text-foreground">
+        {children}
+      </body>
+    </html>
   );
 }
