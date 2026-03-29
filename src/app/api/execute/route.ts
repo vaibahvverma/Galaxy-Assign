@@ -202,14 +202,11 @@ export async function POST(req: NextRequest) {
             if (systemPrompt) parts.push({ text: `System: ${systemPrompt}\n\n` });
             parts.push({ text: userMessage || "Please process this request." });
 
-            // Add images — fetch from /uploads/ URL  
+            // Add images — base64 data URLs passed directly, external URLs fetched
             for (const imgUrl of imageUrls) {
               if (!imgUrl) continue;
-              // Build full URL for server-side fetch
-              const fullUrl = imgUrl.startsWith("/") 
-                ? `http://localhost:${process.env.PORT || 3000}${imgUrl}`
-                : imgUrl;
-              const imgPart = await fetchImagePart(fullUrl);
+              // data: URLs are handled inline by fetchImagePart — no fetch needed
+              const imgPart = await fetchImagePart(imgUrl);
               if (imgPart) parts.push(imgPart);
             }
 
