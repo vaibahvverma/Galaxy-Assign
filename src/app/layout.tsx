@@ -13,10 +13,13 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="dark" suppressHydrationWarning>
-      <body className="antialiased flex flex-col h-screen w-screen overflow-hidden bg-background text-foreground">
-        {children}
-      </body>
-    </html>
+    <ClerkProvider>
+      <html lang="en" className="dark" suppressHydrationWarning>
+        <body className="antialiased flex flex-col h-screen w-screen overflow-hidden bg-background text-foreground">
+          {children}
+        </body>
+      </html>
+    </ClerkProvider>
   );
 }
+
